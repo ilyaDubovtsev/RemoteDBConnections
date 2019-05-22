@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lab3.Controllers;
+using Lab3.Implementation;
+using Lab3.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +34,16 @@ namespace Lab3
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            
+            services.Configure<MongoSettings>(options =>
+            {
+                options.ConnectionString 
+                    = Configuration.GetSection("MongoConnection:ConnectionString").Value;
+                options.Database 
+                    = Configuration.GetSection("MongoConnection:Database").Value;
+            });
+            
+            services.AddTransient<IMongoFeedbackRepository, MongoFeedbackRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -54,9 +67,7 @@ namespace Lab3
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default",  "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
