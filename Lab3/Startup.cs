@@ -43,6 +43,15 @@ namespace Lab3
                     = Configuration.GetSection("MongoConnection:Database").Value;
             });
             
+            services.Configure<RedisSettings>(options =>
+            {
+                options.ConnectionString 
+                    = Configuration.GetSection("RedisConnection:ConnectionString").Value;
+                options.Database 
+                    = Configuration.GetSection("RedisConnection:Database").Value;
+            });
+            
+            services.AddTransient<IRedisFeedbackRepository, RedisFeedbackRepository>();
             services.AddTransient<IMongoFeedbackRepository, MongoFeedbackRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
