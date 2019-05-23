@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Lab3.Implementation;
 using Lab3.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +28,7 @@ namespace Lab3.Controllers
                 for (var i = 0; i < 10; i++)
                 {
                     mongoFeedbackRepository.Create(
-                        new Feedback()
+                        new Models.Feedback()
                         {
                             Id = Guid.NewGuid(),
                             Name = $"Feedback {i}",
@@ -39,6 +42,18 @@ namespace Lab3.Controllers
                 return "Done";
             }
             return "Unknown";
+        }
+
+        [HttpGet("mongoall")]
+        public async Task<string> GetAll()
+        {
+            var allFeedback = await mongoFeedbackRepository.ReadAll().ConfigureAwait(true);
+            var stringBuilder = new StringBuilder();
+            foreach (var feedback in allFeedback)
+            {
+                stringBuilder.Append($"{feedback.Id} {feedback.Name} {feedback.Text} \n");
+            }
+            return stringBuilder.ToString();
         }
     }
 }
