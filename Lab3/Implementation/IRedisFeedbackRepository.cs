@@ -5,7 +5,7 @@ using Lab3.Models;
 
 namespace Lab3.Implementation
 {
-    public interface IMongoFeedbackRepository : IFeedbackRepository
+    public interface IRedisFeedbackRepository : IFeedbackRepository
     {
     }
 }

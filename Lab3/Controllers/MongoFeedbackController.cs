@@ -10,17 +10,17 @@ namespace Lab3.Controllers
     [Route("mongo")]
     public class MongoFeedbackController : Controller
     {
-        private readonly IMongoFeedbackRepository mongoFeedbackRepository;
+        private readonly IFeedbackRepository feedbackRepository;
 
-        public MongoFeedbackController(IMongoFeedbackRepository mongoFeedbackRepository)
+        public MongoFeedbackController(IMongoFeedbackRepository feedbackRepository)
         {
-            this.mongoFeedbackRepository = mongoFeedbackRepository;
+            this.feedbackRepository = feedbackRepository;
         }
 
         [HttpGet("")]
         public async Task<ViewResult> Index()
         {
-            var allFeedback = await mongoFeedbackRepository.ReadAll().ConfigureAwait(true);
+            var allFeedback = await feedbackRepository.ReadAll().ConfigureAwait(true);
             return View(allFeedback.OrderByDescending(f => f.UpdatedAt));
         }
 
@@ -37,7 +37,7 @@ namespace Lab3.Controllers
                 UpdatedAt = DateTime.Now
             };
 
-            mongoFeedbackRepository.Create(feedback);
+            feedbackRepository.Create(feedback);
 
             return RedirectToAction("Index");
         }
@@ -52,37 +52,35 @@ namespace Lab3.Controllers
         public IActionResult Edit()
         {
             var form = Request.Form;
-            Console.WriteLine("****sadsd***");
 
-            Console.WriteLine(form["Id"]);
             var feedback = new Models.Feedback
             {
                 Id = Guid.Parse(form["Id"]),
                 Name = form["Name"],
                 Text = form["Text"],
             };
-            mongoFeedbackRepository.Update(feedback);
+            feedbackRepository.Update(feedback);
             return RedirectToAction("Index");
         }
 
         [HttpGet("update/{id}")]
         public async Task<ViewResult> Update(string id)
         {
-            var feedback = await mongoFeedbackRepository.Read(Guid.Parse(id)).ConfigureAwait(true);
+            var feedback = await feedbackRepository.Read(Guid.Parse(id)).ConfigureAwait(true);
             return View(feedback);
         }
 
         [HttpGet("{id}")]
         public async Task<ViewResult> Show(string id)
         {
-            var feedback = await mongoFeedbackRepository.Read(Guid.Parse(id)).ConfigureAwait(true);
+            var feedback = await feedbackRepository.Read(Guid.Parse(id)).ConfigureAwait(true);
             return View(feedback);
         }
 
         [HttpGet("delete/{id}")]
         public IActionResult Delete(string id)
         {
-            mongoFeedbackRepository.Delete(Guid.Parse(id));
+            feedbackRepository.Delete(Guid.Parse(id));
             return RedirectToAction("Index");
         }
     }

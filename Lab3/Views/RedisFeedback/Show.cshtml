@@ -1,0 +1,19 @@
+@model Feedback
+
+@{
+    ViewBag.Title = "Show";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h2><b>Обратная связь:</b> @Model.Id</h2>
+    <h2><b>Автор:</b> @Model.Name</h2>
+    <h2><b>Текст:</b></h2>
+    <p>@Model.Text</p>
+    <p><i>Создан @Model.CreatedAt</i></p>
+    <p><i>Изменен @Model.UpdatedAt</i></p>
+</div>
+
+<div>
+    @Html.ActionLink("Вернуться к списку", "Index")
+</div>
