@@ -1,8 +1,32 @@
-@model object
+@model IEnumerable<Feedback>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Index";
     Layout = "_Layout";
 }
 
-<h3>MariaDB</h3>
+<h1>Maria</h1>
+
+<h3>@Html.ActionLink("Новая обратная связь", "Create")</h3>
+
+<table class="table">
+    <caption><b>Все отзывы</b></caption>
+    <thead>
+    <tr>
+        <th>Id</th> <th>Name</th> <th>Text</th> <th></th><th></th><th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (Feedback feedback in @Model)
+    {
+        <tr>
+            <td>@feedback.Id</td> 
+            <td>@feedback.Name</td>
+            <td>@feedback.Text</td> 
+            <td>@Html.ActionLink("Смотреть", "Show", feedback)</td>
+            <td>@Html.ActionLink("Править", "Update", feedback)</td>
+            <td>@Html.ActionLink("Удалить", "Delete", feedback)</td>
+        </tr>
+    }
+    </tbody>
+</table>

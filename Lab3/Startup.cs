@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -51,8 +52,15 @@ namespace Lab3
                     = Configuration.GetSection("RedisConnection:Database").Value;
             });
             
+            services.Configure<MariaSetting>(options =>
+            {
+                options.ConnectionString 
+                    = Configuration.GetSection("MariaConnection:ConnectionString").Value;
+            });
+            
             services.AddTransient<IRedisFeedbackRepository, RedisFeedbackRepository>();
             services.AddTransient<IMongoFeedbackRepository, MongoFeedbackRepository>();
+            services.AddTransient<IMariaFeedbackRepository, MariaFeedbackRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

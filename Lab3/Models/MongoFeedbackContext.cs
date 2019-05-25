@@ -5,7 +5,7 @@ namespace Lab3.Models
 {
     public class MongoFeedbackContext
     {
-        private readonly IMongoDatabase database = null;
+        private readonly IMongoDatabase database;
     
         public MongoFeedbackContext(IOptions<MongoSettings> settings)
         {
